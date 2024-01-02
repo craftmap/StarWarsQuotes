@@ -8,6 +8,7 @@ from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
+from aiogram.client.session.aiohttp import AiohttpSession
 
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN = getenv("BOT_TOKEN")
@@ -46,7 +47,9 @@ async def echo_handler(message: types.Message) -> None:
 
 async def main() -> None:
     # Initialize Bot instance with a default parse mode which will be passed to all API calls
-    bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
+    # Special proxy for wokring in pythonanywhere
+    session = AiohttpSession(proxy='http://proxy.server:3128')
+    bot = Bot(TOKEN, parse_mode=ParseMode.HTML, session=session)
     # And the run events dispatching
     await dp.start_polling(bot)
 
