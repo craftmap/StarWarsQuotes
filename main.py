@@ -16,9 +16,7 @@ TOKEN = getenv("BOT_TOKEN")
 
 
 async def main() -> None:
-    logging.basicConfig(level=logging.INFO)
-
-    # Special proxy for wokring in pythonanywhere
+    # Special proxy for working in pythonanywhere
     session = AiohttpSession(proxy='http://proxy.server:3128')
     bot = Bot(TOKEN, parse_mode=ParseMode.HTML, session=session)
 
