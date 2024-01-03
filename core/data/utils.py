@@ -36,17 +36,11 @@ def insert_data_to_db(data):
     # Создать объект-курсор для выполнения запросов
     cursor = cnx.cursor()
 
-    # for quote in data:
-    #     # Выполнить SQL запрос
-    #     query = f"""INSERT quotes_static(quote, quote_translation) VALUES ('{quote["quote"]}', '{quote["quote_translation"]}');"""
-    #     cursor.execute(query)
-    #     cnx.commit()
-
-    cursor.execute(f'SELECT * FROM quotes_static ORDER BY RAND() LIMIT 1;')
-    _, rand_quote, rand_quote_translation = cursor.__next__()
-    print(rand_quote)
-    # for row in cursor:
-    #     print(row)
+    for quote in data:
+        # Выполнить SQL запрос
+        query = f"""INSERT quotes_static(quote, quote_translation) VALUES ('{quote["quote"]}', '{quote["quote_translation"]}');"""
+        cursor.execute(query)
+        cnx.commit()
 
     # Закрыть подключение
     cursor.close()
