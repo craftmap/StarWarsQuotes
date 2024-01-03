@@ -22,7 +22,7 @@ async def command_random_quote(message: Message) -> None:
     table_name = 'quotes_static'
     cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
     _, quote, quote_translation = cursor.__next__()
-    await message.answer(f'<b>quote</b>:{quote}\n<b>цитата</b>:<tg-spoiler>{quote_translation}</tg-spoiler>')
+    await message.answer(f'<b>Quote</b>:\n{quote}\n\n<b>Цитата</b>:\n<tg-spoiler>{quote_translation}</tg-spoiler>')
     await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command rand\nGot: {quote}')
 
 
