@@ -1,3 +1,5 @@
+import json
+
 quotes = """
 1. “Train yourself to let go of everything you fear to lose.” – Yoda
 
@@ -33,9 +35,7 @@ quotes = """
 
 17. “So this is how liberty dies, with thunderous applause.” – Padmé Amidala
 
-18. Luke Skywalker: “No. You’re coming with me. I’ll not leave you here. I’ve got to save you.”
-
-Darth Vader: “You already have, Luke. You were right. You were right about me. Tell your sister you were right.”
+18. Luke Skywalker: “No. You’re coming with me. I’ll not leave you here. I’ve got to save you.” Darth Vader: “You already have, Luke. You were right. You were right about me. Tell your sister you were right.”
 
 19. “I’ve been waiting for you, Obi-Wan. We meet again, at last. The circle is now complete. When I left you, I was but the learner. Now, I am the master.” – Darth Vader
 
@@ -125,9 +125,7 @@ Darth Vader: “You already have, Luke. You were right. You were right about me.
 
 62. “You know, no matter how much we fought, I’ve always hated watching you leave.” – Leia Organa
 
-63. Leia Organa: “I love you.”
-
-Han Solo: “I know.”
+63. Leia Organa: “I love you.” Han Solo: “I know.”
 
 64. “Size matters not. Look at me. Judge me by my size, do you?” – Yoda
 
@@ -145,31 +143,31 @@ Han Solo: “I know.”
 """
 
 quotes_translate = """
-1. “Train yourself to let go of everything you fear to lose.” – Yoda
+1. “Приучите себя отпускать все, что вы боитесь потерять”. – Йода
 
-2. “Many of the truths that we cling to depend on our viewpoint.” – Obi-Wan Kenobi
+2. “Многие истины, за которые мы цепляемся, зависят от нашей точки зрения”. – Оби-Ван Кеноби
 
-3. “Your focus determines your reality.” – Qui-Gon Jinn
+3. “Ваша сосредоточенность определяет вашу реальность”. – Куай-Гон Джинн
 
-4. “Courage wasn’t a matter of taking the whole mountain in a single massive leap. Courage was taking it one step at a time, doing what was necessary now, preparing for the next step, and refusing to worry about whether some step in the future would be the one that would break him.” – Kell Tainer
+4. “Смелость заключалась не в том, чтобы покорить всю гору одним мощным прыжком. Мужество заключалось в том, чтобы делать шаг за шагом, делать то, что необходимо сейчас, готовиться к следующему шагу и отказываться беспокоиться о том, что какой–то шаг в будущем может сломить его”. - Келл Тейнер
 
-5. “Always listen to doubt. Even in times of great haste, take time to listen. Then trust it.” – Qui-Gon Jinn
+5. “Всегда прислушивайтесь к сомнениям. Даже во времена большой спешки найдите время, чтобы выслушать. Затем доверьтесь этому”. – Куай-Гон Джинн
 
-6. “Always more questions than answers, there are.” – Yoda
+6. “Вопросов всегда больше, чем ответов”. – Йода
 
-7. “That’s how we’re gonna win. Not fighting what we hate, saving what we love.” – Rose Tico
+7. “Вот как мы собираемся победить. Не сражаясь с тем, что ненавидим, спасаем то, что любим”. – Роуз Тико
 
-8. “Attachment is forbidden. Possession is forbidden. Compassion, which I would define as unconditional love, is essential to a Jedi’s life. So you might say that we are encouraged to love.” – Anakin Skywalker
+8. “Привязанность запрещена. Владение запрещено. Сострадание, которое я бы определила как безусловную любовь, важно для жизни джедая. Так что можно сказать, что нас поощряют любить”. – Энакин Скайуокер
 
-9. “To die for one’s people is a great sacrifice. To live for one’s people, an even greater sacrifice. I choose to live for my people.” – Riyo Chuchi
+9. “Умереть за свой народ - великая жертва. Жить для своего народа - еще большая жертва. Я выбираю жить для своего народа”. – Рийо Чучи
 
-10. “Anger always makes you feel good at the time. Makes you feel bigger than yourself, and makes you feel that everything you do is justified. But it’s a trap.” – Corran Horn
+10. “Гнев всегда заставляет тебя чувствовать себя хорошо в данный момент. Заставляет вас чувствовать себя выше самого себя и заставляет вас чувствовать, что все, что вы делаете, оправдано. Но это ловушка”. – Корран Хорн
 
-11. “If you define yourself by your power to take life, your desire to dominate, to possess, then you have nothing.” – Obi-Wan Kenobi
+11. “Если вы определяете себя своей способностью отнимать жизнь, своим желанием доминировать, обладать, тогда у вас ничего нет”. – Оби-Ван Кеноби
 
-12. “You have controlled your fear. Now, release your anger. Only your hatred can destroy me.” – Darth Vader
+12. “Ты контролировал свой страх. Теперь освободи свой гнев. Только твоя ненависть может уничтожить меня”. – Дарт Вейдер
 
-13. “Try not. Do or do not. There is no try.” – Yoda
+13. “Не пытайся. Делай или не делай. Попытки не существует”. – Йода
 
 14. «Осознание страха может защитить вас, если он вас не настигнет». - Оби-Ван Кеноби
 
@@ -287,9 +285,6 @@ quotes_translate = """
 """
 
 quotes_Obi_Wan_Kenobi = """
-
-0. “You can kill me, but you will never destroy me. It takes strength to resist the dark side. Only the weak embrace it.” – Obi-Wan Kenobi
-
 1. “War tends to distort our point of view. If we sacrifice our code, even for victory, we may lose that which is important—our honor.” 
 
 2. “If you define yourself by the power to take life, the desire to dominate, to possess—then you have nothing.”
@@ -861,5 +856,24 @@ quotes_Darth_Vader_translate = """
 59. « Я должен был знать, что джедаи замышляют захватить власть !»
 
 60. «Он весь твой, охотник за головами. Перезагрузите камеру для Скайуокера.
-
 """
+
+# quotes = [zip(quotes.split('\n')[i], quotes_translate.split('\n')[i]) for i in range(len(quotes.split('\n')))]
+quotes_data = []
+quotes_split = quotes_Darth_Vader.split('\n')
+for i in range(len(quotes_split)):
+    if len(quotes_split[i]) == 0:
+        continue
+    data = {
+        'i': quotes_split[i].split()[0][:-1],
+        'quote': " ".join(quotes_split[i].split()[1:]) + ' – Darth Vader',
+        'quote_translation': " ".join(quotes_Darth_Vader_translate.split('\n')[i].split()[1:]) + ' – Дарт Вейдер'
+    }
+    quotes_data.append(data)
+
+
+with open('quotes_vader_data.json', 'w') as f:
+    s = json.dumps(quotes_data, ensure_ascii=False).encode('utf8')
+    f.write(s.decode())
+
+
