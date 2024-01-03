@@ -37,8 +37,6 @@ async def main() -> None:
     await set_commands(bot)
 
     connector = await get_db_connector()
-    a = connector.cursor()
-    a.execute('e')
     basic.set_db_connector(connector)
 
     dp = Dispatcher()
