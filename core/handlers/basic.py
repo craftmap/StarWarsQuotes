@@ -24,6 +24,16 @@ async def command_random_quote(message: Message) -> None:
     cursor.close()
 
 
+@router.message(Command("help"))
+async def command_random_quote(message: Message) -> None:
+    await message.answer(
+        'Команды бота:'
+        '/rand — случайная цитата'
+        '/add_quote — добавить цитату (/add_quote <автор>: <цитата>)'
+    )
+    await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command help\n')
+
+
 @router.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """

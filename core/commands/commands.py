@@ -15,7 +15,11 @@ async def set_commands(bot: Bot):
         BotCommand(
             command='rand',
             description='Выдать случайную цитату',
-        )
+        ),
+        BotCommand(
+            command='help',
+            description='Помощь',
+        ),
     ]
 
     await bot.set_my_commands(commands, BotCommandScopeDefault())
