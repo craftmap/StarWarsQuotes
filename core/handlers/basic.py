@@ -42,7 +42,7 @@ async def command_random_quote(message: Message) -> None:
         cursor.close()
 
 
-@router.message(Command("add_quote"))
+@router.message(Command("add"))
 async def add_quote(
         message: Message,
         command: CommandObject
@@ -74,8 +74,8 @@ async def add_quote(
         data=[
             {
                 'quote': quote,
-                'quote_translation': '',
-                'author_en': '',
+                'quote_translation': '-1',
+                'author_en': '-1',
                 'author_ru': author,
             }
         ],

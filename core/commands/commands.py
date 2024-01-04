@@ -1,4 +1,4 @@
-from aiogram import Bot
+from aiogram import Bot, html
 from aiogram.types import BotCommand, BotCommandScopeDefault
 
 
@@ -21,8 +21,8 @@ async def set_commands(bot: Bot):
             description='Помощь',
         ),
         BotCommand(
-            command='add_quote',
-            description='Помощь',
+            command='add',
+            description=f'/add {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату',
         ),
     ]
 
