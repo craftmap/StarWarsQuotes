@@ -22,7 +22,7 @@ def get_random_quote_from_table(table_name):
         cursor.close()
         if doc['quote_translation'] == '':
             return f'<b>Цитата</b>:\n' \
-                   f'{doc["quote_translation"]}\n' \
+                   f'{doc["quote"]}\n' \
                    f'©<i>{doc["author_ru"]}</i>'
         else:
             return f'<b>Quote</b>:\n' \
