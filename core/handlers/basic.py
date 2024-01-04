@@ -20,17 +20,17 @@ def get_random_quote_from_table(table_name):
         cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
         doc = cursor.fetchone()
         cursor.close()
-        if doc['quote_translation'] != '':
-            return f"""<b>Quote</b>:\n
-            {doc["quote"]}\n
-            ©<i>{doc["author_en"]}</i>\n\n
-            <b>Цитата</b>:\n
-            <tg-spoiler>{doc["quote_translation"]}\n
-            ©<i>{doc["author_ru"]}</i></tg-spoiler>"""
+        if doc['quote_translation'] == '':
+            return f'<b>Цитата</b>:\n' \
+                   f'{doc["quote_translation"]}\n' \
+                   f'©<i>{doc["author_ru"]}</i>'
         else:
-            return """<b>Цитата</b>:\n
-            {doc["quote_translation"]}\n
-            ©<i>{doc["author_ru"]}</i>"""
+            return f'<b>Quote</b>:\n' \
+                   f'{doc["quote"]}\n' \
+                   f'©<i>{doc["author_en"]}</i>\n\n' \
+                   f'<b>Цитата</b>:\n' \
+                   f'<tg-spoiler>{doc["quote_translation"]}\n' \
+                   f'©<i>{doc["author_ru"]}</i></tg-spoiler>'
 
 
 @router.message(Command("rand"))
