@@ -65,7 +65,7 @@ async def add_quote(
     if command.args is None:
         await message.answer(
             '<b>Ошибка</b>: не переданы аргументы. Пример:\n'
-            f'/add_quote {html.bold(html.quote("Вася Пупкин: А всё-таки она круглая!"))}'
+            f'/add Вася: А всё-таки она круглая!'
         )
         return
     try:
