@@ -22,7 +22,7 @@ async def set_commands(bot: Bot):
         ),
         BotCommand(
             command='add',
-            description=f'/add {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату',
+            description=f'/add <автор>: <цитата> — добавить цитату',
         ),
     ]
 

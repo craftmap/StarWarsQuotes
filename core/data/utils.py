@@ -1,7 +1,7 @@
 import json
 from db_connection import db_connection
 
-INSERT_QUERY = 'INSERT {table_name}{field_list} VALUES {values_list};'
+INSERT_QUERY = 'INSERT {table_name}(quote, quote_translation, author_en, author_ru) VALUES {values_list};'
 CREATE_TABLE_QUERY = """CREATE TABLE {table_name}(
 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 quote TEXT NOT NULL,
@@ -50,7 +50,6 @@ def insert_data_to_db(data, table_name):
                 # query = f"""INSERT quotes_star_wars(quote, quote_translation, author_en, author_ru) VALUES ('{quote["quote"]}', '{quote["quote_translation"]}', '{quote["author_en"]}', '{quote["author_ru"]}');"""
                 query = INSERT_QUERY.format(
                     table_name=table_name,
-                    field_list=('quote', 'quote_translation', 'author_en', 'author_ru'),
                     values_list=(quote["quote"], quote["quote_translation"], quote["author_en"], quote["author_ru"])
                 )
                 cursor.execute(query)
