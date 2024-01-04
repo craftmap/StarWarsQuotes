@@ -14,7 +14,7 @@ router = Router()
 async def command_random_quote(message: Message) -> None:
     connection = get_db_connection()
     cursor = connection.cursor()
-    table_name = 'quotes_static'
+    table_name = 'quotes_star_wars'
     cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
     doc = cursor.fetchone()
 
