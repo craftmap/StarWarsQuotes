@@ -20,6 +20,8 @@ def get_random_quote_from_table(table_name):
         cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
         doc = cursor.fetchone()
         cursor.close()
+        if not doc:
+            return 'Похоже, вы ещё не добавляли цитат в этом чате🤷'
         if doc['quote_translation'] == '':
             return f'<b>Цитата</b>:\n' \
                    f'{doc["quote"]}\n' \
