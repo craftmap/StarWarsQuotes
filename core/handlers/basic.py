@@ -73,7 +73,7 @@ async def add_quote(
     except ValueError:
         await message.answer(
             '<b>Ошибка</b>: неправильный формат команды. Пример:\n'
-            f'/add Вася Пупкин: А всё-таки она круглая!'
+            f'/add Вася: бла-бла!'
         )
         return
 
