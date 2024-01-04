@@ -103,8 +103,8 @@ async def command_random_quote(message: Message) -> None:
     await message.answer(
         '<b>Команды бота:</b>\n'
         '/rand — случайная цитата\n'
-        f'/add_quote {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату'
-        f'/rand_from_chat - Выдать случайную цитату из этого чата'
+        f'/rand_from_chat - Выдать случайную цитату из этого чата\n'
+        f'/add {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату'
     )
     await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command help\n')
 
