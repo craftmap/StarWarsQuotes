@@ -17,6 +17,8 @@ router = Router()
 def get_random_quote_from_table(table_name):
     with db_connection() as connection:
         cursor = connection.cursor()
+        if not table_exist(table_name):
+            return 'Похоже, вы ещё не добавляли цитат в этом чате🤷'
         cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
         doc = cursor.fetchone()
         cursor.close()
@@ -101,7 +103,8 @@ async def command_random_quote(message: Message) -> None:
     await message.answer(
         '<b>Команды бота:</b>\n'
         '/rand — случайная цитата\n'
-        f'/add_quote {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату'
+        f'/add_quote {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату',
+        f'/rand_from_chat - Выдать случайную цитату из этого чата'
     )
     await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command help\n')
 
