@@ -16,9 +16,9 @@ async def command_random_quote(message: Message) -> None:
     cursor = connection.cursor()
     table_name = 'quotes_static'
     cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
-    _, quote, quote_translation = cursor.__next__()
-    print(quote)
-    await message.answer(f'<b>Quote</b>:\n{quote}\n\n<b>Цитата</b>:\n<tg-spoiler>{quote_translation}</tg-spoiler>')
+    doc = cursor.fetchone()
+
+    await message.answer(f'<b>Quote</b>:\n{doc["quote"]}\n\n<b>Цитата</b>:\n<tg-spoiler>{doc["quote_translation"]}</tg-spoiler>')
     await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command rand\nGot: {quote}')
     connection.close()
     cursor.close()
