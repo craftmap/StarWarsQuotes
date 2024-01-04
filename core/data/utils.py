@@ -1,8 +1,14 @@
 import json
-from os import getenv
-from db_connection import get_db_connection
+from db_connection import db_connection
 
 INSERT_QUERY = 'INSERT {table_name}{field_list} VALUES {values_list};'
+CREATE_TABLE_QUERY = """CREATE TABLE {table_name}(
+id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+quote TEXT NOT NULL,
+quote_translation TEXT NOT NULL,
+author_en TEXT NOT NULL,
+author_ru TEXT NOT NULL
+);"""
 
 
 def load_json_data():
@@ -23,33 +29,34 @@ def load_json_data():
 
 
 def table_exist(table_name):
-    cursor = get_db_connection().cursor()
-    cursor.execute('SHOW TABLES;')
-    bases = sum([list(doc.values()) for doc in cursor.fetchall()], [])
-    print(bases)
-    print('quotes_star_wars' in bases)
-    print('quotes_star_war1s' in bases)
-
+    with db_connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute('SHOW TABLES;')
+        docs = cursor.fetchall()
+        if not docs:
+            return False
+        bases = sum([list(doc.values()) for doc in docs], [])
+        cursor.close()
+        return table_name in bases
 
 
 def insert_data_to_db(data, table_name):
-    cursor = get_db_connection().cursor()
+    with db_connection() as connection:
+        cursor = connection.cursor()
 
-    for quote in data:
-        # Выполнить SQL запрос
-        try:
-            # query = f"""INSERT quotes_star_wars(quote, quote_translation, author_en, author_ru) VALUES ('{quote["quote"]}', '{quote["quote_translation"]}', '{quote["author_en"]}', '{quote["author_ru"]}');"""
-            query = INSERT_QUERY.format(
-                table_name=table_name,
-                field_list=('quote', 'quote_translation', 'author_en', 'author_ru'),
-                values_list=({quote["quote"]}, {quote["quote_translation"]}, {quote["author_en"]}, {quote["author_ru"]})
-            )
-            cursor.execute(query)
-            cnx.commit()
-        except:
-            print('ERROR' + str(query))
+        for quote in data:
+            # Выполнить SQL запрос
+            try:
+                # query = f"""INSERT quotes_star_wars(quote, quote_translation, author_en, author_ru) VALUES ('{quote["quote"]}', '{quote["quote_translation"]}', '{quote["author_en"]}', '{quote["author_ru"]}');"""
+                query = INSERT_QUERY.format(
+                    table_name=table_name,
+                    field_list=('quote', 'quote_translation', 'author_en', 'author_ru'),
+                    values_list=({quote["quote"]}, {quote["quote_translation"]}, {quote["author_en"]}, {quote["author_ru"]})
+                )
+                cursor.execute(query)
+                connection.commit()
+            except:
+                print('ERROR' + str(query))
 
-    # Закрыть подключение
-    cursor.close()
-    cnx.close()
-
+        # Закрыть подключение
+        cursor.close()
