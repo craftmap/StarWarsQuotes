@@ -1,5 +1,5 @@
 from aiogram import Bot, html
-from aiogram.types import BotCommand, BotCommandScopeDefault
+from aiogram.types import BotCommand, BotCommandScopeDefault, InlineKeyboardButton
 
 
 async def set_commands(bot: Bot):
@@ -20,8 +20,8 @@ async def set_commands(bot: Bot):
             command='help',
             description='Помощь',
         ),
-        BotCommand(
-            command='add',
+        InlineKeyboardButton(
+            text='add',
             description=f'/add <автор>: <цитата> — добавить цитату',
         ),
         BotCommand(
