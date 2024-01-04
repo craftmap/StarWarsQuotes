@@ -38,9 +38,7 @@ def insert_data_to_db(data):
 
     for quote in data:
         # Выполнить SQL запрос
-        query = f"""INSERT quotes_star_wars(quote, quote_translation, author_en, author_ru) 
-                    VALUES ('{quote["quote"]}', '{quote["quote_translation"]}', '{quote["author_en"]},
-                    '{quote["author_ru"]}');"""
+        query = f"""INSERT quotes_star_wars(quote, quote_translation, author_en, author_ru) VALUES ('{quote["quote"]}', '{quote["quote_translation"]}', '{quote["author_en"]}, '{quote["author_ru"]}');"""
         cursor.execute(query)
         cnx.commit()
 
