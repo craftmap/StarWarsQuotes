@@ -4,7 +4,7 @@ from aiogram.utils.markdown import hbold
 from aiogram import Router
 from aiogram.filters.command import Command, CommandObject
 from aiogram import html
-from core.data.utils import insert_data_to_db
+from core.data.utils import insert_data_to_db, table_exist
 
 from os import getenv
 from db_connection import get_db_connection
@@ -38,7 +38,7 @@ async def command_random_quote(message: Message) -> None:
         getenv('ADMIN_ID'),
         f'{message.from_user.full_name} command rand\nGot: {doc["quote"]}'
     )
-    print(message.chat.__dict__)
+    table_exist('de')
     connection.close()
     cursor.close()
 
@@ -61,7 +61,8 @@ async def add_quote(
             f'/add_quote {html.bold(html.quote("Вася Пупкин: А всё-таки она круглая!"))}'
         )
         return
-    chat_id = message.chat.username
+    chat_title = message.chat.username.title()
+
     insert_data_to_db(
         data=[
             {

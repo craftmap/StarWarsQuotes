@@ -1,7 +1,6 @@
 import json
-import mysql.connector
 from os import getenv
-
+from db_connection import get_db_connection
 
 INSERT_QUERY = 'INSERT {table_name}{field_list} VALUES {values_list};'
 
@@ -23,21 +22,15 @@ def load_json_data():
     return quotes_data
 
 
+def table_exist(table_name):
+    cursor = get_db_connection().cursor()
+    cursor.execute('SHOW TABLES;')
+    print('quotes_star_wars' in cursor.fetchall())
+    print('quotes_star_war1s' in cursor.fetchall())
+
+
 def insert_data_to_db(data, table_name):
-    # Установить параметры подключения
-    config = {
-      'user': getenv('USERNAME'),
-      'password': getenv('DATABASE_PASS'),
-      'host': getenv('DATABASE_HOST_ADDRESS'),
-      'database': getenv('DATABASE_NAME'),
-      'raise_on_warnings': True
-    }
-
-    # Создать подключение
-    cnx = mysql.connector.connect(**config)
-
-    # Создать объект-курсор для выполнения запросов
-    cursor = cnx.cursor()
+    cursor = get_db_connection().cursor()
 
     for quote in data:
         # Выполнить SQL запрос
