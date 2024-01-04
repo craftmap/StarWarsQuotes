@@ -2,7 +2,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
 from aiogram import Router
-from aiogram.filters.command import Command
+from aiogram.filters.command import Command, CommandObject
 
 from os import getenv
 from db_connection import get_db_connection
@@ -26,10 +26,18 @@ async def command_random_quote(message: Message) -> None:
     cursor.close()
 
 
+@router.message(Command("add_quote"))
+async def add_quote(
+        message: Message,
+        command: CommandObject
+):
+    print(command.args)
+
+
 @router.message(Command("help"))
 async def command_random_quote(message: Message) -> None:
     await message.answer(
-        'Команды бота:\n'
+        '<b>Команды бота:</b>\n'
         '/rand — случайная цитата\n'
         '/add_quote {автор}: {цитата} — добавить цитату'
     )
