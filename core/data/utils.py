@@ -25,8 +25,10 @@ def load_json_data():
 def table_exist(table_name):
     cursor = get_db_connection().cursor()
     cursor.execute('SHOW TABLES;')
-    print('quotes_star_wars' in cursor.fetchall())
-    print('quotes_star_war1s' in cursor.fetchall())
+    bases = cursor.fetchall()
+    print(bases)
+    print('quotes_star_wars' in bases)
+    print('quotes_star_war1s' in bases)
 
 
 def insert_data_to_db(data, table_name):
