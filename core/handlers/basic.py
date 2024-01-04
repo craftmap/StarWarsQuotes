@@ -27,9 +27,9 @@ async def command_random_quote(message: Message) -> None:
 @router.message(Command("help"))
 async def command_random_quote(message: Message) -> None:
     await message.answer(
-        'Команды бота:'
-        '/rand — случайная цитата'
-        '/add_quote — добавить цитату (/add_quote <автор>: <цитата>)'
+        r'Команды бота:'
+        r'/rand — случайная цитата'
+        r'/add_quote — добавить цитату (/add_quote <автор>: <цитата>)'
     )
     await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command help\n')
 
