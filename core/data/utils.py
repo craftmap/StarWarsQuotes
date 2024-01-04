@@ -3,6 +3,9 @@ import mysql.connector
 from os import getenv
 
 
+INSERT_QUERY = 'INSERT {table_name}{field_list} VALUES {values_list};'
+
+
 def load_json_data():
     with open('quotes.json', 'r') as f:
         quotes1 = json.load(f)
@@ -20,7 +23,7 @@ def load_json_data():
     return quotes_data
 
 
-def insert_data_to_db(data):
+def insert_data_to_db(data, table_name):
     # Установить параметры подключения
     config = {
       'user': getenv('USERNAME'),
@@ -39,17 +42,18 @@ def insert_data_to_db(data):
     for quote in data:
         # Выполнить SQL запрос
         try:
-            query = f"""INSERT quotes_star_wars(quote, quote_translation, author_en, author_ru) VALUES ('{quote["quote"]}', '{quote["quote_translation"]}', '{quote["author_en"]}', '{quote["author_ru"]}');"""
+            # query = f"""INSERT quotes_star_wars(quote, quote_translation, author_en, author_ru) VALUES ('{quote["quote"]}', '{quote["quote_translation"]}', '{quote["author_en"]}', '{quote["author_ru"]}');"""
+            query = INSERT_QUERY.format(
+                table_name=table_name,
+                field_list=('quote', 'quote_translation', 'author_en', 'author_ru'),
+                values_list=({quote["quote"]}, {quote["quote_translation"]}, {quote["author_en"]}, {quote["author_ru"]})
+            )
             cursor.execute(query)
             cnx.commit()
         except:
-            print(query)
+            print('ERROR' + str(query))
 
     # Закрыть подключение
     cursor.close()
     cnx.close()
 
-
-if __name__ == '__main__':
-    insert_data_to_db(load_json_data())
-    print('data loaded!')
