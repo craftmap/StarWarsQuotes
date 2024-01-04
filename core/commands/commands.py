@@ -24,6 +24,10 @@ async def set_commands(bot: Bot):
             command='add',
             description=f'/add <автор>: <цитата> — добавить цитату',
         ),
+        BotCommand(
+            command='rand_from_chat',
+            description=f'Выдать случайную цитату из этого чата',
+        ),
     ]
 
     await bot.set_my_commands(commands, BotCommandScopeDefault())

@@ -11,35 +11,46 @@ from db_connection import db_connection
 
 router = Router()
 
+# TODO: выискивать в истории чата залайканное сообщение и выдавать его за цитату
+
+
+def get_random_quote_from_table(table_name):
+    with db_connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
+        doc = cursor.fetchone()
+        cursor.close()
+        if doc['quote_translation'] != '':
+            return f"""<b>Quote</b>:\n
+            {doc["quote"]}\n
+            ©<i>{doc["author_en"]}</i>\n\n
+            <b>Цитата</b>:\n
+            <tg-spoiler>{doc["quote_translation"]}\n
+            ©<i>{doc["author_ru"]}</i></tg-spoiler>"""
+        else:
+            return """<b>Цитата</b>:\n
+            {doc["quote_translation"]}\n
+            ©<i>{doc["author_ru"]}</i>"""
+
 
 @router.message(Command("rand"))
 async def command_random_quote(message: Message) -> None:
-    with db_connection() as connection:
-        cursor = connection.cursor()
-        table_name = 'quotes_star_wars'
-        cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
-        doc = cursor.fetchone()
+    text = get_random_quote_from_table('quotes_star_wars')
+    await message.answer(text)
+    await message.bot.send_message(
+        getenv('ADMIN_ID'),
+        f'{message.from_user.full_name} command rand\nGot: {text}'
+    )
 
-        if doc['quote_translation'] != '':
-            await message.answer(
-                f'<b>Quote</b>:\n'
-                f'{doc["quote"]}\n'
-                f'©<i>{doc["author_en"]}</i>\n\n'
-                f'<b>Цитата</b>:\n'
-                f'<tg-spoiler>{doc["quote_translation"]}\n'
-                f'©<i>{doc["author_ru"]}</i></tg-spoiler>')
-        else:
-            await message.answer(
-                f'<b>Цитата</b>:\n'
-                f'{doc["quote_translation"]}\n'
-                f'©<i>{doc["author_ru"]}</i>')
 
-        await message.bot.send_message(
-            getenv('ADMIN_ID'),
-            f'{message.from_user.full_name} command rand\nGot: {doc["quote"]}'
-        )
-
-        cursor.close()
+@router.message(Command("rand_from_chat"))
+async def command_random_quote(message: Message) -> None:
+    text = get_random_quote_from_table(message.chat.username.title() + '_table')
+    await message.answer(text)
+    await message.bot.send_message(
+        getenv('ADMIN_ID'),
+        f'{message.from_user.full_name} command rand_from_chat\nGot: {text}'
+    )
 
 
 @router.message(Command("add"))
@@ -74,8 +85,8 @@ async def add_quote(
         data=[
             {
                 'quote': quote,
-                'quote_translation': '-1',
-                'author_en': '-1',
+                'quote_translation': '',
+                'author_en': '',
                 'author_ru': author,
             }
         ],
