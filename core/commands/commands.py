@@ -20,8 +20,8 @@ async def set_commands(bot: Bot):
             command='help',
             description='Помощь',
         ),
-        InlineKeyboardButton(
-            text='add',
+        BotCommand(
+            command='add',
             description=f'/add <автор>: <цитата> — добавить цитату',
         ),
         BotCommand(
