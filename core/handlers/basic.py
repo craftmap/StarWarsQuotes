@@ -19,7 +19,7 @@ async def command_random_quote(message: Message) -> None:
     doc = cursor.fetchone()
 
     await message.answer(f'<b>Quote</b>:\n{doc["quote"]}\n\n<b>Цитата</b>:\n<tg-spoiler>{doc["quote_translation"]}</tg-spoiler>')
-    await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command rand\nGot: {quote}')
+    await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command rand\nGot: {doc["quote"]}')
     connection.close()
     cursor.close()
 
