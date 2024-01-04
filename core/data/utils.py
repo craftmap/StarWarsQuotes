@@ -51,7 +51,7 @@ def insert_data_to_db(data, table_name):
                 query = INSERT_QUERY.format(
                     table_name=table_name,
                     field_list=('quote', 'quote_translation', 'author_en', 'author_ru'),
-                    values_list=({quote["quote"]}, {quote["quote_translation"]}, {quote["author_en"]}, {quote["author_ru"]})
+                    values_list=(quote["quote"], quote["quote_translation"], quote["author_en"], quote["author_ru"])
                 )
                 cursor.execute(query)
                 connection.commit()
