@@ -53,7 +53,7 @@ async def command_random_quote(message: Message) -> None:
 
 
 @router.message(Command("rand_from_chat"))
-async def command_random_quote(message: Message) -> None:
+async def command_random_quote_from_chat(message: Message) -> None:
     chat_title = message.chat.username.title() if message.chat.type == 'private' else message.chat.title
     text = get_random_quote_from_table(chat_title + '_table')
     await message.answer(text)
@@ -67,7 +67,7 @@ async def add_quote(
 ):
     if command.args is None:
         await message.answer(
-            '<b>Ошибка</b>: не переданы аргументы. Пример:\n'
+            '<b>❌Ошибка</b>: не переданы аргументы. Пример:\n'
             f'/add Вася: А всё-таки она круглая!'
         )
         return
@@ -75,7 +75,7 @@ async def add_quote(
         author, quote = command.args.split(": ", maxsplit=1, )
     except ValueError:
         await message.answer(
-            '<b>Ошибка</b>: неправильный формат команды. Пример:\n'
+            '<b>❌Ошибка</b>: неправильный формат команды. Пример:\n'
             f'/add Вася: бла-бла!'
         )
         return
@@ -107,12 +107,12 @@ async def add_quote(
 
 
 @router.message(Command("help"))
-async def command_random_quote(message: Message) -> None:
+async def command_help(message: Message) -> None:
     await message.answer(
         '<b>Команды бота:</b>\n'
         '/rand — случайная цитата\n'
         f'/rand_from_chat - Выдать случайную цитату из этого чата\n'
-        f'/add {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату'
+        f'/add {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату (В ОДНОМ сообщении)'
     )
     await notify_the_creator(message, 'help')
 
@@ -123,4 +123,15 @@ async def command_start_handler(message: Message) -> None:
     This handler receives messages with `/start` command
     """
     await message.answer(f'Hello, {hbold(message.from_user.full_name)}!')
+    await command_help(message)
     await notify_the_creator(message, 'start')
+
+
+@router.message()
+async def unknown_command(message: Message) -> None:
+    if message.chat.type == 'private':
+        await message.reply('Мне неизвестна эта команда🤷\nВот что я умею:')
+        await command_random_quote(message)
+    await message.answer(f'Hello, {hbold(message.from_user.full_name)}!')
+    await command_help(message)
+    await notify_the_creator(message, 'unknown')
