@@ -84,11 +84,10 @@ async def add_quote(
         table_name = message.chat.username.title() + '_table'
     else:
         table_name = message.chat.title + '_table'
+    table_name = table_name.replace(' ', '_')
     if not table_exist(table_name):
         with db_connection() as connection:
             cursor = connection.cursor()
-            query = CREATE_TABLE_QUERY.format(table_name=table_name)
-            print(query)
             cursor.execute(CREATE_TABLE_QUERY.format(table_name=table_name))
             connection.commit()
             cursor.close()
