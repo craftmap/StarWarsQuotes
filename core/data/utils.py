@@ -49,4 +49,4 @@ def insert_data_to_db(data, table_name):
 
 
 if __name__ == '__main__':
-    insert_data_to_db(load_json_data(), '')
+    insert_data_to_db(load_json_data(), 'Pizdec_Party_table')
