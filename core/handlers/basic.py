@@ -131,7 +131,5 @@ async def command_start_handler(message: Message) -> None:
 async def unknown_command(message: Message) -> None:
     if message.chat.type == 'private':
         await message.reply('Мне неизвестна эта команда🤷\nВот что я умею:')
-        await command_random_quote(message)
-    await message.answer(f'Hello, {hbold(message.from_user.full_name)}!')
-    await command_help(message)
-    await notify_the_creator(message, 'unknown')
+        await command_help(message)
+        await notify_the_creator(message, 'unknown')
