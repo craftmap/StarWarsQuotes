@@ -32,7 +32,7 @@ def get_random_quote_from_table(table_name):
         else:
             return f'<b>Quote</b>:\n' \
                    f'{doc["quote"]}\n' \
-                   f'©<i>{doc["author_en"]}</i>\n\n' \
+                   f'© <i>{doc["author_en"]}</i>\n\n' \
                    f'<b>Цитата</b>:\n' \
                    f'<tg-spoiler>{doc["quote_translation"]}\n' \
                    f'© <i>{doc["author_ru"]}</i></tg-spoiler>'
