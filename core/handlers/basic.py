@@ -54,7 +54,8 @@ async def command_random_quote(message: Message) -> None:
 
 @router.message(Command("rand_from_chat"))
 async def command_random_quote(message: Message) -> None:
-    text = get_random_quote_from_table(message.chat.title + '_table')
+    chat_title = message.chat.username.title() if message.chat.type == 'private' else message.chat.title
+    text = get_random_quote_from_table(chat_title + '_table')
     await message.answer(text)
     await notify_the_creator(message, 'rand_from_chat')
 
