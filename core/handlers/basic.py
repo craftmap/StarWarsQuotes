@@ -16,6 +16,7 @@ router = Router()
 
 
 def get_random_quote_from_table(table_name):
+    table_name = table_name.replace(' ', '_')
     with db_connection() as connection:
         cursor = connection.cursor()
         if not table_exist(table_name):
