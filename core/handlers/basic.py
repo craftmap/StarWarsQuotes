@@ -11,7 +11,8 @@ from db_connection import db_connection
 
 router = Router()
 
-# TODO: выискивать в истории чата залайканное сообщение и выдавать его за цитату
+# Идея: выискивать в истории чата залайканное сообщение и выдавать его за цитату
+# Идея: редактировать цитаты?
 
 
 def get_random_quote_from_table(table_name):
@@ -37,24 +38,25 @@ def get_random_quote_from_table(table_name):
                    f'© <i>{doc["author_ru"]}</i></tg-spoiler>'
 
 
+async def notify_the_creator(message, command):
+    await message.bot.send_message(
+        getenv('ADMIN_ID'),
+        f'{message.from_user.full_name} command <b>{command}</b>\n'
+    )
+
+
 @router.message(Command("rand"))
 async def command_random_quote(message: Message) -> None:
     text = get_random_quote_from_table('quotes_star_wars')
     await message.answer(text)
-    await message.bot.send_message(
-        getenv('ADMIN_ID'),
-        f'{message.from_user.full_name} command rand\nGot: {text}'
-    )
+    await notify_the_creator(message, 'rand')
 
 
 @router.message(Command("rand_from_chat"))
 async def command_random_quote(message: Message) -> None:
     text = get_random_quote_from_table(message.chat.username.title() + '_table')
     await message.answer(text)
-    await message.bot.send_message(
-        getenv('ADMIN_ID'),
-        f'{message.from_user.full_name} command rand_from_chat\nGot: {text}'
-    )
+    await notify_the_creator(message, 'rand_from_chat')
 
 
 @router.message(Command("add"))
@@ -97,6 +99,8 @@ async def add_quote(
         ],
         table_name=table_name,
     )
+    await message.answer(f'<b>Цитата:</b> {author}: {quote} - добавлена успешно ✅')
+    await notify_the_creator(message, 'add')
 
 
 @router.message(Command("help"))
@@ -107,7 +111,7 @@ async def command_random_quote(message: Message) -> None:
         f'/rand_from_chat - Выдать случайную цитату из этого чата\n'
         f'/add {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату'
     )
-    await message.bot.send_message(getenv('ADMIN_ID'), f'{message.from_user.full_name} command help\n')
+    await notify_the_creator(message, 'help')
 
 
 @router.message(CommandStart())
@@ -116,3 +120,4 @@ async def command_start_handler(message: Message) -> None:
     This handler receives messages with `/start` command
     """
     await message.answer(f'Hello, {hbold(message.from_user.full_name)}!')
+    await notify_the_creator(message, 'start')
