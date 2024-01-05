@@ -87,6 +87,8 @@ async def add_quote(
     if not table_exist(table_name):
         with db_connection() as connection:
             cursor = connection.cursor()
+            query = CREATE_TABLE_QUERY.format(table_name=table_name)
+            print(query)
             cursor.execute(CREATE_TABLE_QUERY.format(table_name=table_name))
             connection.commit()
             cursor.close()
