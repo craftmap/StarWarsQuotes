@@ -80,7 +80,7 @@ async def add_quote(
         return
 
     if message.chat.type == 'private':
-        table_name = message.chat.username + '_table'
+        table_name = message.chat.username.title() + '_table'
     else:
         table_name = message.chat.title + '_table'
     if not table_exist(table_name):
