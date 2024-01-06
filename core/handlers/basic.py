@@ -25,7 +25,9 @@ def get_random_quote_from_table(table_name, author: str = None):
         author_query = (f" WHERE author_ru='{author[0].swapcase()+author[1:]}' "
                         f"OR author_ru='{author[0]+author[1:]}' "
                         f"OR author_en='{author[0].swapcase()+author[1:]}' "
-                        f"OR author_en='{author[0]+author[1:]}' ")
+                        f"OR author_en='{author[0]+author[1:]}' "
+                        f"OR author_ru='{ author[0].swapcase()+author[1:]}' "
+                        f"OR author_ru='{ author[0]+author[1:]}' ")
         s = f'SELECT * FROM {table_name}{author_query if author else ""}ORDER BY RAND() LIMIT 1;'
         print(s)
         cursor.execute(
