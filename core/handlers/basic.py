@@ -35,11 +35,9 @@ def get_quote_message_from_doc(doc: dict) -> str:
 
 def search_quote_with_words(table_name: str, words: str) -> str:
     with db_connection() as connection:
-        logging.fatal('connect to db')
         cursor = connection.cursor()
         query = f"SELECT * FROM {{table_name}} WHERE {{field}} LIKE '%{words}%';"
         cursor.execute(query.format(table_name=table_name, field='quote'))
-        logging.fatal('query1 %s', query.format(table_name=table_name, field='quote'))
         doc = cursor.fetchone()
         if not doc:
             cursor.execute(query.format(table_name=table_name, field='quote_translation'))
@@ -50,11 +48,15 @@ def search_quote_with_words(table_name: str, words: str) -> str:
         if not doc:
             cursor.execute(query.format(table_name=GLOBAL_TABLE_NAME, field='quote_translation'))
             doc = cursor.fetchone()
+        words_list = words.split()
+        or_query = " OR {field} LIKE '%{word}%'"
         if not doc:
-            words_list = words.split()
-            or_query = "OR {field} LIKE '%{word}%'"
             cursor.execute(query.format(table_name=table_name, field='quote')[:-1] +
-                           f"{' '.join([or_query.format(field='quote', word=words[i]) for i in range(len(words_list))])};")
+                           f"{' '.join([or_query.format(field='quote', word=words_list[i]) for i in range(len(words_list))])};")
+            doc = cursor.fetchone()
+        if not doc:
+            cursor.execute(query.format(table_name=GLOBAL_TABLE_NAME, field='quote')[:-1] +
+                           f"{' '.join([or_query.format(field='quote', word=words_list[i]) for i in range(len(words_list))])};")
             doc = cursor.fetchone()
         if not doc:
             return f'Я не нашел цитату со {"словами" if len(words.split())>1 else "словом"} {words}🤷'
@@ -131,9 +133,7 @@ async def command_search_by_words(message: Message, command: CommandObject):
         )
         return
     table_name = get_chat_title(message) + '_table'
-    logging.fatal('text %s', table_name)
     text = search_quote_with_words(table_name, words=command.args)
-    logging.fatal('text %s', text)
     await message.answer(text)
     await notify_the_creator(message, 'search')
 
