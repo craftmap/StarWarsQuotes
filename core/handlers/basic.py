@@ -7,7 +7,7 @@ from aiogram.filters.command import Command, CommandObject
 from aiogram import html
 from core.data.utils import insert_data_to_db, table_exist, CREATE_TABLE_QUERY
 import logging
-
+import random
 from os import getenv
 from db_connection import db_connection
 
@@ -38,28 +38,29 @@ def search_quote_with_words(table_name: str, words: str) -> str:
         cursor = connection.cursor()
         query = f"SELECT * FROM {{table_name}} WHERE {{field}} LIKE '%{words}%';"
         cursor.execute(query.format(table_name=table_name, field='quote'))
-        doc = cursor.fetchone()
-        if not doc:
+        docs = cursor.fetchall()
+        if not docs:
             cursor.execute(query.format(table_name=table_name, field='quote_translation'))
-            doc = cursor.fetchone()
-        if not doc:
+            docs = cursor.fetchall()
+        if not docs:
             cursor.execute(query.format(table_name=GLOBAL_TABLE_NAME, field='quote'))
-            doc = cursor.fetchone()
-        if not doc:
+            docs = cursor.fetchall()
+        if not docs:
             cursor.execute(query.format(table_name=GLOBAL_TABLE_NAME, field='quote_translation'))
-            doc = cursor.fetchone()
+            docs = cursor.fetchall()
         words_list = words.split()
         or_query = " OR {field} LIKE '%{word}%'"
-        if not doc:
+        if not docs:
             cursor.execute(query.format(table_name=table_name, field='quote')[:-1] +
                            f"{' '.join([or_query.format(field='quote', word=words_list[i]) for i in range(len(words_list))])};")
-            doc = cursor.fetchone()
-        if not doc:
+            docs = cursor.fetchall()
+        if not docs:
             cursor.execute(query.format(table_name=GLOBAL_TABLE_NAME, field='quote')[:-1] +
                            f"{' '.join([or_query.format(field='quote', word=words_list[i]) for i in range(len(words_list))])};")
-            doc = cursor.fetchone()
-        if not doc:
+            docs = cursor.fetchall()
+        if not docs:
             return f'Я не нашел цитату со {"словами" if len(words.split())>1 else "словом"} {words}🤷'
+        doc = random.choice(docs)
         return get_quote_message_from_doc(doc)
 
 
