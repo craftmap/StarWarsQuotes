@@ -22,7 +22,7 @@ def get_random_quote_from_table(table_name, author: str =None):
         cursor = connection.cursor()
         if not table_exist(table_name):
             return 'Похоже, вы ещё не добавляли цитат в этом чате🤷'
-        author_query = f"WHERE author = '{author[0]+author[1:]}' OR author = {author[0].swapcase()+author[1:]}"
+        author_query = f"WHERE author = '{author[0]+author[1:]}' OR author = '{author[0].swapcase()+author[1:]}' "
         cursor.execute(
             f'SELECT * FROM {table_name}{author_query if author else ""}ORDER BY RAND() LIMIT 1;'
         )
