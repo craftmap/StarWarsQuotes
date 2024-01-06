@@ -13,15 +13,19 @@ router = Router()
 
 # Идея: выискивать в истории чата залайканное сообщение и выдавать его за цитату
 # Идея: редактировать цитаты?
+# Идея: цитата дня с подходящей картинкой
 
 
-def get_random_quote_from_table(table_name):
+def get_random_quote_from_table(table_name, author: str =None):
     table_name = table_name.replace(' ', '_')
     with db_connection() as connection:
         cursor = connection.cursor()
         if not table_exist(table_name):
             return 'Похоже, вы ещё не добавляли цитат в этом чате🤷'
-        cursor.execute(f'SELECT * FROM {table_name} ORDER BY RAND() LIMIT 1;')
+        author_query = f"WHERE author = '{author[0]+author[1:]}' OR author = {author[0].swapcase()+author[1:]}"
+        cursor.execute(
+            f'SELECT * FROM {table_name}{author_query if author else ""}ORDER BY RAND() LIMIT 1;'
+        )
         doc = cursor.fetchone()
         cursor.close()
         if not doc:
@@ -46,6 +50,10 @@ async def notify_the_creator(message, command):
     )
 
 
+def get_chat_title(message: Message) -> str:
+    return message.chat.username.title() if message.chat.type == 'private' else message.chat.title
+
+
 @router.message(Command("rand"))
 async def command_random_quote(message: Message) -> None:
     text = get_random_quote_from_table('quotes_star_wars')
@@ -55,10 +63,23 @@ async def command_random_quote(message: Message) -> None:
 
 @router.message(Command("rand_from_chat"))
 async def command_random_quote_from_chat(message: Message) -> None:
-    chat_title = message.chat.username.title() if message.chat.type == 'private' else message.chat.title
-    text = get_random_quote_from_table(chat_title + '_table')
+    text = get_random_quote_from_table(get_chat_title(message) + '_table')
     await message.answer(text)
     await notify_the_creator(message, 'rand_from_chat')
+
+
+@router.message(Command('author'))
+async def command_quote_by_author(message: Message, command: CommandObject) -> None:
+    if command.args is None:
+        await message.answer(
+            '<b>❌Ошибка</b>: не переданы аргументы. Пример:\n'
+            f'/author Вася'
+        )
+        return
+    table_name = get_chat_title(message) + '_table'
+    text = get_random_quote_from_table(table_name, author=command.args.strip())
+    await message.answer(text)
+    await notify_the_creator(message, 'author')
 
 
 @router.message(Command("add"))
