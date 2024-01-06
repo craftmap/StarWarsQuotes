@@ -135,6 +135,7 @@ async def command_help(message: Message) -> None:
         '<b>Команды бота:</b>\n'
         '/rand — случайная цитата\n'
         f'/rand_from_chat - Выдать случайную цитату из этого чата\n'
+        '/author <автор> - Выдать цитату конкретного автора\n'
         f'/add {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату (В ОДНОМ сообщении)'
     )
     await notify_the_creator(message, 'help')
