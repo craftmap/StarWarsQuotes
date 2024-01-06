@@ -1,10 +1,12 @@
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
+from settings import GLOBAL_TABLE_NAME
 from aiogram import Router
 from aiogram.filters.command import Command, CommandObject
 from aiogram import html
 from core.data.utils import insert_data_to_db, table_exist, CREATE_TABLE_QUERY
+import logging
 
 from os import getenv
 from db_connection import db_connection
@@ -33,20 +35,28 @@ def get_quote_message_from_doc(doc: dict) -> str:
 
 def search_quote_with_words(table_name: str, words: str) -> str:
     with db_connection() as connection:
+        logging.fatal('connect to db')
         cursor = connection.cursor()
-        query = f"SELECT * FROM {table_name} WHERE {{field}} LIKE '%{words}%';"
-        cursor.execute(query.format(field='quote_translation'))
+        query = f"SELECT * FROM {{table_name}} WHERE {{field}} LIKE '%{words}%';"
+        cursor.execute(query.format(table_name=table_name, field='quote'))
+        logging.fatal('query1 %s', query.format(table_name=table_name, field='quote'))
         doc = cursor.fetchone()
         if not doc:
-            cursor.execute(query.format(field='quote'))
+            cursor.execute(query.format(table_name=table_name, field='quote_translation'))
+            doc = cursor.fetchone()
+        if not doc:
+            cursor.execute(query.format(table_name=GLOBAL_TABLE_NAME, field='quote'))
+            doc = cursor.fetchone()
+        if not doc:
+            cursor.execute(query.format(table_name=GLOBAL_TABLE_NAME, field='quote_translation'))
             doc = cursor.fetchone()
         if not doc:
             words_list = words.split()
-            or_query = "OR text LIKE '%{word}%'"
-            cursor.execute(query.format(field='quote')[:-1] +
-                           f"{' '.join([or_query.format(word=words[i]) for i in range(len(words_list))])};")
-            docs = cursor.fetchone()
-        if not docs:
+            or_query = "OR {field} LIKE '%{word}%'"
+            cursor.execute(query.format(table_name=table_name, field='quote')[:-1] +
+                           f"{' '.join([or_query.format(field='quote', word=words[i]) for i in range(len(words_list))])};")
+            doc = cursor.fetchone()
+        if not doc:
             return f'Я не нашел цитату со {"словами" if len(words.split())>1 else "словом"} {words}🤷'
         return get_quote_message_from_doc(doc)
 
@@ -121,9 +131,11 @@ async def command_search_by_words(message: Message, command: CommandObject):
         )
         return
     table_name = get_chat_title(message) + '_table'
+    logging.fatal('text %s', table_name)
     text = search_quote_with_words(table_name, words=command.args)
+    logging.fatal('text %s', text)
     await message.answer(text)
-    await notify_the_creator(message)
+    await notify_the_creator(message, 'search')
 
 
 @router.message(Command("add"))
