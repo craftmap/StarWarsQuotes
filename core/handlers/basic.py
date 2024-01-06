@@ -188,6 +188,7 @@ async def command_help(message: Message) -> None:
         '/rand — случайная цитата\n'
         f'/rand_from_chat - Выдать случайную цитату из этого чата\n'
         f'/author {html.bold(html.quote("<автор>"))} - Выдать цитату конкретного автора\n'
+        f'/search {html.bold(html.quote("<фраза>"))} - Найти цитату по фразе\n'
         f'/add {html.bold(html.quote("<автор>: <цитата>"))} — добавить цитату (В ОДНОМ сообщении)'
     )
     await notify_the_creator(message, 'help')
